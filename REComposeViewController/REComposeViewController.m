@@ -54,6 +54,7 @@
         
         _sheetView = [[REComposeSheetView alloc] initWithFrame:CGRectMake(0, 0, self.currentWidth - 8, 202) simple: simple postTitle: postTitle];
     }
+    
     return self;
     
 }
@@ -61,11 +62,12 @@
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil mode:REComposeModeNormal postTitle: @"Post"];
+    self = [self initWithNibName:nibNameOrNil bundle:nibBundleOrNil mode:REComposeModeNormal postTitle:@"Post"];
     
     if (self) {
         
     }
+    
     return self;
 }
 
@@ -126,7 +128,7 @@
         [_containerView addSubview:_paperclipView];
         [_paperclipView setHidden:YES];
     }
-        
+    
     if (!_attachmentImage)
         _attachmentImage = [UIImage imageNamed:@"REComposeViewController.bundle/URLAttachment"];
     
@@ -139,7 +141,7 @@
 - (void)didMoveToParentViewController:(UIViewController *)parent
 {
     [super didMoveToParentViewController:parent];
-
+    
     _backgroundView.frame = _rootViewController.view.bounds;
     
     if (REUIKitIsFlatMode()) {
@@ -157,14 +159,14 @@
                           delay:0
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                        if (REUIKitIsFlatMode()) {
-                            self.containerView.alpha = 1;
-                        }
-                        self.backgroundView.alpha = 1;
-    } completion:nil];
+                         if (REUIKitIsFlatMode()) {
+                             self.containerView.alpha = 1;
+                         }
+                         self.backgroundView.alpha = 1;
+                     } completion:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewOrientationDidChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
-
+    
 }
 
 - (void)presentFromRootViewController
@@ -352,11 +354,11 @@
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     // If our device has a cmera, we want to take a picture, otherwise we just pick from the library
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-    [picker setSourceType:UIImagePickerControllerSourceTypeCamera];
+        [picker setSourceType:UIImagePickerControllerSourceTypeCamera];
     } else {
-    [picker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+        [picker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
     }
-
+    
     picker.delegate = self;
     [self presentViewController:picker animated:YES completion:nil];
 }

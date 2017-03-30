@@ -27,74 +27,152 @@
 #import "REComposeViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
+@interface REComposeSheetView ()
+
+// Properties
+@property (nonatomic, strong) UILabel *navTitle;
+
+@end
+
+
+
+
 @implementation REComposeSheetView
 
-- (id)initWithFrame:(CGRect)frame
-{
+- (instancetype)initWithFrame:(CGRect)frame simple:(BOOL)simple postTitle:(NSString *)postTitle {
+    
     self = [super initWithFrame:frame];
+    
     if (self) {
+        
+        self.simple = simple;
+        
         self.backgroundColor = [UIColor whiteColor];
         
         _navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 44)];
-        _navigationBar.autoresizingMask = UIViewAutoresizingFlexibleWidth
-        | UIViewAutoresizingFlexibleBottomMargin
-        | UIViewAutoresizingFlexibleRightMargin;
+        _navigationBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
         
         _navigationItem = [[UINavigationItem alloc] initWithTitle:@""];
         _navigationBar.items = @[_navigationItem];
         
-        UIBarButtonItem *cancelButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"REComposeSheetView_Cancel", nil, [NSBundle mainBundle], @"Cancel", @"Cancel") style:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonPressed)];
+        UIBarButtonItem *cancelButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", @"cancel") style:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonPressed)];
+        _navigationItem.leftBarButtonItem = cancelButtonItem;
         
-        UIBarButtonItem *postButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"REComposeSheetView_Post", nil, [NSBundle mainBundle], @"Post", @"Post") style:REUIKitIsFlatMode() ? UIBarButtonItemStyleDone : UIBarButtonItemStyleBordered target:self action:@selector(postButtonPressed)];
+        self.postButtonItem = [APP_STYLE themedBarButtonItemWithTitle:postTitle usingAppearanceIdentifier:REWButtonAppearancePrimary target:self action:@selector(postButtonPressed)];
+        _navigationItem.rightBarButtonItem = self.postButtonItem;
         
-        if (!REUIKitIsFlatMode()) {
-            _navigationItem.leftBarButtonItem = cancelButtonItem;
-            _navigationItem.rightBarButtonItem = postButtonItem;
-        } else {
-            UIBarButtonItem *leftSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-            leftSeperator.width = 5.0;
-            UIBarButtonItem *rightSeperator = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-            rightSeperator.width = 5.0;
-            _navigationItem.leftBarButtonItems = @[leftSeperator, cancelButtonItem];
-            _navigationItem.rightBarButtonItems = @[rightSeperator, postButtonItem];
-        }
+        //_navigationBar.layer.borderColor = [UIColor redColor].CGColor;
+        //_navigationBar.layer.borderWidth = 2.0;
+        
+        // Custom title
+        CGFloat margin = 65;
+        CGFloat titleHeight = 25;
+        CGRect titleFrame = CGRectMake(margin, ((44 / 2) - (titleHeight / 2)), _navigationBar.frame.size.width - (margin * 2), titleHeight);
         
         
-        _textViewContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 44, frame.size.width - (REUIKitIsFlatMode() ? 20 : 0), frame.size.height - 44)];
+        self.navTitle = [[UILabel alloc] initWithFrame:titleFrame];
+        
+        self.navTitle.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:19];
+        self.navTitle.backgroundColor = [UIColor clearColor];
+        
+        self.navTitle.adjustsFontSizeToFitWidth = YES;
+        self.navTitle.minimumScaleFactor = 0.5;
+        
+        self.navTitle.textColor = [UIColor whiteColor];
+        self.navTitle.textAlignment = NSTextAlignmentCenter;
+        self.navTitle.text = _delegate.title;
+        
+        self.navTitle.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        
+        
+        // self.navTitle.layer.borderWidth = 1.0;
+        // self.navTitle.layer.borderColor = [UIColor greenColor].cgColor;
+        
+        // navigationItem.titleView = self.navTitle;
+        
+        
+        _textViewContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 44, frame.size.width, frame.size.height - 44)];
         _textViewContainer.clipsToBounds = YES;
         _textViewContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        _textView = [[DEComposeTextView alloc] initWithFrame:CGRectMake(REUIKitIsFlatMode() ? 8 : 0, 0, frame.size.width - 100, frame.size.height - 47)];
-        _textView.backgroundColor = [UIColor clearColor];
-        _textView.font = [UIFont systemFontOfSize: REUIKitIsFlatMode() ? 17 : 21];
-        _textView.contentInset = UIEdgeInsetsMake(0, 0, 20, 0);
+        
+        _textView = [[DEComposeTextView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height - 47)];
+        _textView.backgroundColor = [UIColor whiteColor];
+        _textView.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
+        
+        CGFloat bottomMargin = self.simple ? 0 : 20;
+        
+        _textView.contentInset = UIEdgeInsetsMake(0, 0, bottomMargin, 0);
         _textView.bounces = YES;
+        _textView.keyboardAppearance = UIKeyboardAppearanceDark;
+        _textView.enablesReturnKeyAutomatically = YES;
+        
+        if (self.simple) {
+            
+            _textView.hidden = YES;
+            
+            CGFloat sideMargin = 20.0;
+            CGFloat topMargin = 15.0;
+            
+            _textField = [[UITextField alloc] initWithFrame:CGRectMake((sideMargin / 2.0), topMargin, (frame.size.width - sideMargin), 25)];
+            _textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+            _textField.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
+            
+            _textField.returnKeyType = UIReturnKeyDone;
+            _textField.enablesReturnKeyAutomatically = YES;
+            _textField.delegate = self;
+            _textField.keyboardAppearance = UIKeyboardAppearanceDark;
+            
+            [_textField addTarget:self action:@selector(textFieldDidChange) forControlEvents:UIControlEventEditingChanged];
+            
+            // _textField.layer.borderWidth = 1.0;
+            // _textField.layer.borderColor = [UIColor greenColor].CGColor;
+            
+            [_textViewContainer addSubview:_textField];
+            
+        } else {
+            
+            _textView.delegate = self;
+            
+        }
+        
+        // _textField.layer.borderWidth = 1.0;
+        // _textField.layer.borderColor = [UIColor greenColor].CGColor;
         
         [_textViewContainer addSubview:_textView];
         [self addSubview:_textViewContainer];
         
-        _attachmentView = [[UIView alloc] initWithFrame:CGRectMake(frame.size.width - 84, 54, 84, 79)];
-        [self addSubview:_attachmentView];
-        
-        _attachmentImageView = [[UIImageView alloc] initWithFrame:CGRectMake(REUIKitIsFlatMode() ? 2 : 6, 2, 72, 72)];
-        if (!REUIKitIsFlatMode()) {
+        if (!self.simple) {
+            
+            _attachmentImageView = [[UIView alloc] initWithFrame:CGRectMake(frame.size.width = 84, 54, 84, 79)];
             _attachmentImageView.layer.cornerRadius = 3.0f;
-        }
-        _attachmentImageView.layer.masksToBounds = YES;
-        [_attachmentView addSubview:_attachmentImageView];
-        
-        _attachmentContainerView = [[UIImageView alloc] initWithFrame:_attachmentView.bounds];
-        if (!REUIKitIsFlatMode()) {
+            _attachmentImageView.layer.masksToBounds = YES;
+            [_attachmentView addSubview:_attachmentImageView];
+            
+            _attachmentContainerView = [[UIImageView alloc] initWithFrame:_attachmentView.bounds];
             _attachmentContainerView.image = [UIImage imageNamed:@"REComposeViewController.bundle/AttachmentFrame"];
+            
+            [_attachmentView addSubview:_attachmentContainerView];
+            _attachmentView.hidden = YES;
+            
         }
-        [_attachmentView addSubview:_attachmentContainerView];
-        _attachmentView.hidden = YES;
-      
-        _attachmentViewButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _attachmentViewButton.frame = _attachmentView.bounds;
-        [_attachmentView addSubview:_attachmentViewButton];
-    
+        
         [self addSubview:_navigationBar];
+        
     }
+    
+    return self;
+}
+
+
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    
+    self = [self initWithFrame:frame simple:NO postTitle:@"Post"];
+    
+    if (self) {
+        
+    }
+    
     return self;
 }
 

@@ -36,7 +36,7 @@ typedef enum _REComposeResult {
 } REComposeResult;
 
 
-#pragma mark - REW modification 1: REComposeMode
+#pragma mark - Added REComposeMode
 
 typedef enum {
     REComposeModeNormal = 0,
@@ -44,10 +44,11 @@ typedef enum {
 } REComposeMode;
 
 
-
 typedef void (^REComposeViewControllerCompletionHandler)(REComposeViewController *composeViewController, REComposeResult result);
 
 @protocol REComposeViewControllerDelegate;
+
+
 
 @interface REComposeViewController : UIViewController <REComposeSheetViewDelegate> {
     REComposeSheetView *_sheetView;
@@ -55,6 +56,9 @@ typedef void (^REComposeViewControllerCompletionHandler)(REComposeViewController
     UIView *_backView;
     UIView *_containerView;
     UIImageView *_paperclipView;
+    
+    // BOOL _hasAttachment;
+    // UIImage *_attachmentImage;
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil mode:(REComposeMode)mode postTitle:(NSString *)postTitle;
@@ -72,13 +76,22 @@ typedef void (^REComposeViewControllerCompletionHandler)(REComposeViewController
 @property (strong, readwrite, nonatomic) UIImage *attachmentImage;
 @property (weak, readonly, nonatomic) UIViewController *rootViewController;
 
+@property (nonatomic, assign) REComposeMode mode;
+
+
 - (void)presentFromRootViewController;
 - (void)presentFromViewController:(UIViewController *)controller;
 
 @end
 
+
+
 @protocol REComposeViewControllerDelegate <NSObject>
 
 - (void)composeViewController:(REComposeViewController *)composeViewController didFinishWithResult:(REComposeResult)result;
+
+@optional
+- (void)composeViewController:(REComposeViewController *)composeViewController didDisappearWithResult:(REComposeResult)result;
+- (void)composeViewControllerDidAppear:(REComposeViewController *)composeViewController;
 
 @end

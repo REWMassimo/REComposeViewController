@@ -28,7 +28,7 @@
 
 @protocol REComposeSheetViewDelegate;
 
-@interface REComposeSheetView : UIView {
+@interface REComposeSheetView : UIView <UITextFieldDelegate, UITextViewDelegate> {
     UIImageView *_attachmentContainerView;
 }
 
@@ -41,11 +41,24 @@
 @property (readonly, nonatomic) DEComposeTextView *textView;
 @property (readonly, nonatomic) UIButton *attachmentViewButton;
 
+@property (readonly, nonatomic) UITextField *textField;
+
+@property (nonatomic, assign) BOOL simple;
+@property (nonatomic, strong) UIBarButtonItem *postButtonItem;
+
+@property (readonly, nonatomic) UIButton *attachmentViewButton;
+
+- (instancetype) initWithFrame:(CGRect)frame simple:(BOOL)simple postTitle:(NSString *)postTitle;
+
+
 @end
 
 @protocol REComposeSheetViewDelegate <NSObject>
 
 - (void)cancelButtonPressed;
 - (void)postButtonPressed;
+
+@optional
+- (NSString *)reComposeSheetView:(REComposeSheetView *)sheetView titleForPostButton:(UIButton *)button;
 
 @end
