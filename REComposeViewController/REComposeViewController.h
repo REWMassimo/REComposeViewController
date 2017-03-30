@@ -35,6 +35,21 @@ typedef enum _REComposeResult {
     REComposeResultPosted
 } REComposeResult;
 
+
+#pragma mark - REW modifications 
+
+typedef enum {
+    REComposeModeNormal = 0,
+    REComposeModePrompt,
+} REComposeMode;
+
+
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil mode:(REComposeMode)mode postTitle:(NSString *)postTitle;
+
+
+
+
+
 typedef void (^REComposeViewControllerCompletionHandler)(REComposeViewController *composeViewController, REComposeResult result);
 
 @protocol REComposeViewControllerDelegate;

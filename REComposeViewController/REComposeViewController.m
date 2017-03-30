@@ -37,13 +37,34 @@
 
 @implementation REComposeViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+
+#pragma mark - Forked / modified init for use with REComposeMode enum
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil mode:(REComposeMode)mode postTitle:(NSString *)postTitle {
+    
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    
     if (self) {
-        _cornerRadius = (REUIKitIsFlatMode()) ? 6 : 10;
-        _sheetView = [[REComposeSheetView alloc] initWithFrame:CGRectMake(0, 0, self.currentWidth - 8, 202)];
-        self.tintColor = [UIColor colorWithRed:247/255.0 green:247/255.0 blue:247/255.0 alpha:1.0];
+        
+        self.mode = mode;
+        
+        _cornerRadius = 10;
+        
+        BOOL simple = self.mode == REComposeModePrompt;
+        
+        _sheetView = [[REComposeSheetView alloc] initWithFrame:CGRectMake(0, 0, self.currentWidth - 8, 202) simple: simple postTitle: postTitle];
+    }
+    return self;
+    
+}
+
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil mode:REComposeModeNormal postTitle: @"Post"];
+    
+    if (self) {
+        
     }
     return self;
 }
