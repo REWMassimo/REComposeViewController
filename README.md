@@ -139,6 +139,8 @@ Roman Efimov
 - https://twitter.com/romaonthego
 - romefimov@gmail.com
 
+Local modifications by Andy Madan via Massimo Savino, in a convenience initializer and enum added to REComposeViewController.
+
 ## License
 
 REComposeViewController is available under the MIT license.
