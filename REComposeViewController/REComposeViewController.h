@@ -36,17 +36,12 @@ typedef enum _REComposeResult {
 } REComposeResult;
 
 
-#pragma mark - REW modifications 
+#pragma mark - REW modification 1: REComposeMode
 
 typedef enum {
     REComposeModeNormal = 0,
     REComposeModePrompt,
 } REComposeMode;
-
-
-- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil mode:(REComposeMode)mode postTitle:(NSString *)postTitle;
-
-
 
 
 
@@ -61,6 +56,8 @@ typedef void (^REComposeViewControllerCompletionHandler)(REComposeViewController
     UIView *_containerView;
     UIImageView *_paperclipView;
 }
+
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil mode:(REComposeMode)mode postTitle:(NSString *)postTitle;
 
 @property (copy, readwrite, nonatomic) REComposeViewControllerCompletionHandler completionHandler;
 @property (weak, readwrite, nonatomic) id<REComposeViewControllerDelegate> delegate;
