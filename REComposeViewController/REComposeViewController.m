@@ -52,7 +52,7 @@
         
         BOOL simple = self.mode == REComposeModePrompt;
         
-        _sheetView = [[REComposeSheetView alloc] initWithFrame:CGRectMake(0, 0, self.currentWidth - 8, 202) simple: simple postTitle: postTitle];
+        _sheetView = [[REComposeSheetView alloc] initWithFrame:CGRectMake(0, 0, self.currentWidth - 8, 202) simple:simple postTitle: postTitle];
     }
     
     return self;

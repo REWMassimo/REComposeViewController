@@ -39,17 +39,11 @@
 @property (readonly, nonatomic) UINavigationBar *navigationBar;
 @property (readonly, nonatomic) UIView *textViewContainer;
 @property (readonly, nonatomic) DEComposeTextView *textView;
-@property (readonly, nonatomic) UIButton *attachmentViewButton;
-
 @property (readonly, nonatomic) UITextField *textField;
-
 @property (nonatomic, assign) BOOL simple;
 @property (nonatomic, strong) UIBarButtonItem *postButtonItem;
 
-@property (readonly, nonatomic) UIButton *attachmentViewButton;
-
-- (instancetype) initWithFrame:(CGRect)frame simple:(BOOL)simple postTitle:(NSString *)postTitle;
-
+- (instancetype)initWithFrame:(CGRect)frame simple:(BOOL)simple postTitle:(NSString *)postTitle;
 
 @end
 
