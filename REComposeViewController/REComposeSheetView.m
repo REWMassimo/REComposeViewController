@@ -39,7 +39,7 @@
 
 @implementation REComposeSheetView
 
-- (instancetype)initWithFrame:(CGRect)frame simple:(BOOL)simple postTitle:(NSString *)postTitle {
+- (instancetype)initWithFrame:(CGRect)frame simple:(BOOL)simple postTitle:(NSString *)postTitle postButtonItem:(UIBarButtonItem *)postButtonItem {
     
     self = [super initWithFrame:frame];
     
@@ -58,7 +58,15 @@
         UIBarButtonItem *cancelButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", @"cancel") style:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonPressed)];
         _navigationItem.leftBarButtonItem = cancelButtonItem;
         
-        self.postButtonItem = [APP_STYLE themedBarButtonItemWithTitle:postTitle usingAppearanceIdentifier:REWButtonAppearancePrimary target:self action:@selector(postButtonPressed)];
+        
+        /** REW-specific UI element loosened from this Pod (postButtonItem) - this styling will/should be presented to the Pod on instantiation.
+            
+            [APP_STYLE themedBarButtonItemWithTitle:postTitle usingAppearanceIdentifier:REWButtonAppearancePrimary target:self action:@selector(postButtonPressed)];
+         
+         */
+        
+        self.postButtonItem = postButtonItem;
+        
         _navigationItem.rightBarButtonItem = self.postButtonItem;
         
         //_navigationBar.layer.borderColor = [UIColor redColor].CGColor;

@@ -43,7 +43,7 @@
 @property (nonatomic, assign) BOOL simple;
 @property (nonatomic, strong) UIBarButtonItem *postButtonItem;
 
-- (instancetype)initWithFrame:(CGRect)frame simple:(BOOL)simple postTitle:(NSString *)postTitle;
+- (instancetype)initWithFrame:(CGRect)frame simple:(BOOL)simple postTitle:(NSString *)postTitle postButtonItem:(UIBarButtonItem *)postButtonItem;
 
 @end
 
