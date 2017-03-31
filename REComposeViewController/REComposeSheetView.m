@@ -175,7 +175,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     
-    self = [self initWithFrame:frame simple:NO postTitle:@"Post"];
+    self = [self initWithFrame:frame simple:NO postTitle:@"Post" postButtonItem:nil];
     
     if (self) {
         
